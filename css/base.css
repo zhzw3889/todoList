@@ -1,5 +1,5 @@
 * {
-    /* background-color: rgba(0,0,0,.1); */
+    /* background-color: rgba(0,0,0,.9); */
     /* 以下三句以border-box形式定义box的尺寸问题，相对计算比较简单 */
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -20,6 +20,7 @@ body {
     max-width: 700px;
     margin:0 auto;		/*居中*/
     position: relative;
+    padding: 0 10px;
 }
 h1 {
     text-align: center;

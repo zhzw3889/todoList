@@ -9,10 +9,10 @@
   <body>
     <div class="container"> <!--总容器首-->
       <h1>我的Todo</h1>
-      <div class="add-task">
-	<input type="text" placeholder="e.g. 记得练字" />
+      <form class="add-task">
+	<input name="content" type="text" placeholder="e.g. 记得练字" />
 	<button type="submit">submit</button>
-      </div>
+      </form>
       <div class="task-list"> <!-- 清单列表首 -->
 	<div class="task-item">	<!-- 任务开始 -->
 	  <span><input name="" type="checkbox" value=""/></span>
@@ -69,6 +69,9 @@
     </div> <!--总容器尾 -->
     <script type="text/javascript"
 	    src="node_modules/jquery/dist/jquery.js"></script>
+    <script type="text/javascript"
+	    src="node_modules/store/store.js"></script>
+
     <script type="text/javascript" src="js/base.js"></script>
   </body>
 </html>
