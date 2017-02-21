@@ -63,6 +63,9 @@ input[type=date]:focus {
 .task-list {
     margin: 10px 0;
 }
+.fr {
+    float: right;
+}
 button{
     display: inline-block;
     cursor: pointer;
@@ -122,3 +125,17 @@ button{
     right: 0;
     background-color: rgba(30,30,30,.6);
 }
+.task-content {
+    margin-left: 10px;
+}
+.action {
+    color: #888;
+    font-size: 90%;
+}
+.action:hover {
+    color: #333;
+}
+
+
+
+
