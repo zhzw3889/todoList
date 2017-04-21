@@ -28,6 +28,7 @@ h1 {
 input,
 .task-item,
 button,
+.task-detail,
 .task-detail-mask,
 textarea {
     border-radius: 3px;
@@ -46,7 +47,7 @@ input[type=text], input[type=date] {
     box-shadow: inset 0 1px 2px rgba(0,0,0,.3);
 }
 textarea {
-    min-height: 120px;
+    min-height: 100px;
     margin-bottom: 10px;
 }
 textarea:hover,
@@ -77,8 +78,10 @@ button{
     width: 84%;
     margin-right: 1%;
 }
-.add-task [type=submit] {
+[type=submit] {
     background-color: #12989e;
+}
+.add-task [type=submit] {
     width: 15%;
 }
 .add-task [type=submit]:hover {
@@ -112,13 +115,19 @@ button{
     height: 100%;
     background-color: #FFF;
     padding: 10px;
+    border-radius: 3px 0 0 3px;	/*右邊沒有弧度，剪切的效果*/
+    box-shadow: 0 1px 2px 1px rgba(0,0,0,.1);
 }
 .task-detail .content {
     padding: 10px;
     font-weight: 900;		/*加粗*/
     cursor: pointer;
 }
+.task-detail .input-item {
+    margin-bottom: 5px;
+}
 .task-detail-mask {
+    position: fixed;		/*作用到整個頁面，而不只是母元素*/
     top: 0;
     bottom: 0;
     left: 0;
