@@ -76,12 +76,14 @@
     
     // 監聽打開task詳情事件
     function listen_task_detail() {
-	var index;
+	var index,
+	    real_index;
 
 	// 雙擊item時顯示詳情，不必單擊詳情按鈕
 	$('.task-item').on('dblclick', function() {
 	    index = $(this).data('index');
-	    show_task_detail(index);
+	    real_index = get(index);
+	    show_task_detail(real_index);
 	});
 	
 	$task_detail_trigger.on('click', function() {
@@ -89,7 +91,7 @@
 	    var $item = $this.parent().parent();
 	    var index = $item.data('index');
 	    // 找到數組中的實際對應的real_index
-	    var real_index = get(index);
+	    real_index = get(index);
 	    show_task_detail(real_index);
 	});
     }
@@ -273,9 +275,13 @@
 	    }
 	}
 
+	// 對於標記完成的item，在底部渲染，index從未完成的num_of_uncomplete開始
 	for( var k = 0; k < complete_items.length; k++) {
 	    $task = render_task_item(complete_items[k], num_of_uncomplete+k);
-	    if( !$task ) continue;
+	    // 因爲我的complete_items數組是push元素的，和教程中不同，裏面沒有null元素
+	    // 教程中一直接賦值的方式雖然方便，但不簡潔，會有很多null元素存在
+	    // 故而不需要檢驗退出循環的操作，如此數組爲空則會自動跳出for語句
+	    // if( !$task ) continue;
 	    $task.addClass('completed');
 	    $task_list.append($task);
 	}

@@ -98,6 +98,21 @@ button{
     box-shadow: 0 2px 3px rgba(0,0,0,.4);
     cursor: pointer;		/*悬浮时呈手状，暗示可点击*/
 }
+.task-item.completed {
+    color: #aaa;
+    /* background: rgba(255,255,255,0.7); */
+    opacity: 0.4;
+}
+.task-item.completed:after {
+    content: "";
+    height: 1px;
+    background: #aaa;
+    width: 96%;			/*留出checkbox，防止誤操作*/
+    position: relative;
+    top: -9px;
+    display: block;
+    float: right;
+}
 .task-item:hover {
     background-color: #DDD;
 }
