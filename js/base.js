@@ -11,7 +11,11 @@
 	$update_form,		// 用於更新form
 	$task_detail_content,	// detail的content元素
 	$task_detail_content_input, //  用于修改content的input
-	$checkbox_complete
+	$checkbox_complete,
+	$msg = $('.msg'),
+	$msg_content = $msg.find('.msg-content'),
+	$msg_confirm = $msg.find('.confirmed'),
+	$alerter = $('.alerter')
     ;
 
     init();
@@ -19,6 +23,7 @@
     // 初始化
     function init() {
 	task_list = store.get('task_list') || [];
+	listen_msg_event();
 	// 刪除無效的index項
 	for(var i = 0; i < task_list.length; i++) {
 	    if( !task_list[i] ) {
@@ -29,11 +34,58 @@
 	if( task_list.length ) {
 	    render_task_list();
 	}
+	task_remind_check();
+	console.log('task_list', task_list);
     }
+
+    function task_remind_check() {
+	var current_timestamp;
+
+	var itl = setInterval(function() {
+	    for(var i = 0; i < task_list.length; i++) {
+		var item = task_list[i],
+		    task_timestamp;
+
+		// 程序運行過程中還是存在null元素的，只在init()中清除
+		if(!item || !item.remind_date || item.informed) {
+		    continue;
+		}
+		current_timestamp = (new Date()).getTime();
+		task_timestamp = (new Date(item.remind_date)).getTime();
+
+		if( current_timestamp - task_timestamp >= 1 ) {
+		    update_task(i, {informed: true});
+		    show_msg(item.content);
+		}
+	    }
+	}, 300);
+    }
+
+    function show_msg(msg) {
+	if( !msg ) {
+	    return;
+	}
+
+	$msg_content.html(msg);
+	$alerter.get(0).play();	// 播放提示音
+	$msg.show();
+    }
+
     
+    function hide_msg() {
+	$msg.hide();
+	$alerter.get(0).pause(); // 停止提示音
+    }
+
     $form_add_task.on('submit', on_add_task_form_submit);
     $task_detail_mask.on('click', hide_task_detail);
-	
+
+    function listen_msg_event() {
+	$msg_confirm.on('click', function() {
+	    hide_msg();
+	});
+    }
+
     function on_add_task_form_submit(e) {
 	// new_task必须在此域中，之前放在全局中出现问题
 	// 每一次都新增一個對象
@@ -130,7 +182,6 @@
 		return real_index;
 	    }
 	}
-
     }
 
     
@@ -211,7 +262,8 @@
 	    '</div>'+
 	    '</div>'+
 	    '<div class="remind input-item">'+
-	    '<input name="remind_date" type="date" value="'+ item.remind_date +'">'+
+	    '<labal>提醒时间</labal>'+
+	    '<input class="datetime" name="remind_date" type="text" value="'+ (item.remind_date || '') +'">'+
 	    '</div>'+
 	    '</div>'+
 	    '<div class="input-item"><button type="submit">更新</button></div>'+
@@ -221,6 +273,7 @@
 	$task_detail.html('');
 	// 添加新模板
 	$task_detail.html(tpl);
+	$('.datetime').datetimepicker();
 	// 選中form，後將監聽其submit事件
 	$update_form = $task_detail.find('form');
 	// 選中顯示task內容的元素

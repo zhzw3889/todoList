@@ -159,7 +159,18 @@ button{
 .action:hover {
     color: #333;
 }
-
-
-
+.msg {
+    display: none;
+    text-align: center;
+    background: #eac212;
+    padding: 10px;
+    color: #333;
+}
+.anchor {
+    cursor: pointer;
+}
+.alert {
+    width: 0;
+    height: 0;
+}
 

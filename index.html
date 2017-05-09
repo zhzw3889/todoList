@@ -5,8 +5,13 @@
     <title>My Todolist App</title>
     <link href="node_modules/normalize.css/normalize.css" rel="stylesheet"/>
     <link rel="stylesheet" href="css/base.css" type="text/css" media="screen" />
+    <link href="node_modules/jquery-datetimepicker/build/jquery.datetimepicker.min.css" rel="stylesheet"/>
   </head>
   <body>
+    <div class="msg">
+      <span class="msg-content"></span>
+      <span class="anchor confirmed">知道了</span>
+    </div>
     <div class="container"> <!--总容器首-->
       <h1>我的Todo</h1>
       <form class="add-task">
@@ -44,10 +49,13 @@
 	<!-- </div> -->
       </div> <!-- 任务详情尾 -->  
     </div> <!--总容器尾 -->
+    <video class="alerter" src="Tik Tok.mp3"></video>
     <script type="text/javascript"
 	    src="node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript"
 	    src="node_modules/store/store.js"></script>
     <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript"
+	    src="node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js"></script>
   </body>
 </html>
