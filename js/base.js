@@ -181,11 +181,8 @@
 
 	// 尋找對應的task_list項
 	for(var j = 0; j < task_list.length; j++) {
-	    // 刪除某個item後，緊接着勾選完成，if語句提示錯誤，改爲下面的問題解決
-	    // if (task_list[j].content == item_content) {
-	    // 	real_index = j;
-	    // 	return real_index;
-	    // }
+	    // 刪除某個item後，緊接着勾選完成，if語句提示錯誤
+	    // 在delete_task()函數裏添加delete_null_item()後問題解決
 	    if (task_list[j].content == item_content) {
 		real_index = j;
 		return real_index;
@@ -214,7 +211,6 @@
     // 删除一条task
     function delete_task(index){
 	// 如果没有index或者index不存在，则直接返回
-	
 	if( index === undefined || !task_list[index] ){
 	    return;
 	}
