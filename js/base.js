@@ -24,18 +24,22 @@
     function init() {
 	task_list = store.get('task_list') || [];
 	listen_msg_event();
-	// 刪除無效的index項
-	for(var i = 0; i < task_list.length; i++) {
-	    if( !task_list[i] ) {
-		task_list.splice(i, 1);
-	    }
-	}
+	delete_null_item();
 	// 開始就渲染，即開始就顯示原來的item信息
 	if( task_list.length ) {
 	    render_task_list();
 	}
 	task_remind_check();
 	console.log('task_list', task_list);
+    }
+
+    // 刪除無效的index項
+    function delete_null_item() {
+	for(var i = 0; i < task_list.length; i++) {
+	    if( !task_list[i] ) {
+		task_list.splice(i, 1);
+	    }
+	}
     }
 
     function task_remind_check() {
@@ -177,6 +181,11 @@
 
 	// 尋找對應的task_list項
 	for(var j = 0; j < task_list.length; j++) {
+	    // 刪除某個item後，緊接着勾選完成，if語句提示錯誤，改爲下面的問題解決
+	    // if (task_list[j].content == item_content) {
+	    // 	real_index = j;
+	    // 	return real_index;
+	    // }
 	    if (task_list[j].content == item_content) {
 		real_index = j;
 		return real_index;
@@ -210,6 +219,7 @@
 	    return;
 	}
 	delete task_list[index];
+	delete_null_item();
 	refresh_task_list();
     }
 

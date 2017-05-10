@@ -124,6 +124,7 @@ button{
 /* 任务详情相对与container定位 */
 .task-detail {
     bottom: 0;
+    overflow: auto;		/*防止item太少時detail太矮*/
     right: 0;
     color: #333;
     width: 50%;
