@@ -2,6 +2,8 @@
     'use strict';
 
     var $form_add_task = $('.add-task'),
+	$body = $('body'),
+	$window = $(window),	// 与body不同
 	$task_delete,
 	$task_delete_trigger,	// 刪除按鈕，而非item
 	$task_detail = $('.task-detail'),
@@ -19,7 +21,7 @@
     ;
 
     init();
-
+    pop('abc');
     // 初始化
     function init() {
 	task_list = store.get('task_list') || [];
@@ -376,6 +378,72 @@
 	
 	return $(list_item_tpl);
     }
+
+    // 自定義的alert函數
+    function pop(arg) {
+	if( !arg ) {
+	    console.error('pop title is required');
+	}
+
+	// conf作为函数的配置对象
+	var conf = {}, $box, $mask;
+
+	$box = $('<div></div>')
+	    .css({
+		width: 300,
+		height: 200,
+		background: '#fff',
+		position: 'fixed',
+		'border-radius': 4,
+		'box-shadow': '0 1px 2px rgba(0,0,0,0.5)'
+	    });
+
+	$mask = $('<div></div>')
+	    .css({
+		position: 'fixed',
+		background: 'rgba(0,0,0,0.5)',
+		top: 0,
+		bottom: 0,
+		left: 0,
+		right: 0
+	    });
+
+	function adjust_box_position() {
+	    var window_width = $window.width(),
+		window_height = $window.height(),
+		box_width = $box.width(),
+		box_height = $box.height(),
+		move_x,
+		move_y
+	    ;
+
+	    move_x = (window_width - box_width) / 2;
+	    move_y = (window_height - box_height) / 2 - 30;
+
+	    $box.css({
+		left: move_x,
+		top: move_y
+	    });
+
+	}
+
+	// 调整窗口大小時從新居中
+	$window.on('resize', function() {
+	    adjust_box_position();
+	});
+	
+	if( typeof arg == 'string' ) {
+	    conf.title = arg;
+	}
+	else {
+	    conf = $.extend(conf, arg);
+	}
+
+	$mask.appendTo($body);
+	$box.appendTo($body);
+	$window.resize();	// 初始狀體時居中
+    }
+
 })();//本地域
 
 
