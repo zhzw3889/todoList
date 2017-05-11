@@ -21,7 +21,7 @@
     ;
 
     init();
-    pop('abc');
+
     // 初始化
     function init() {
 	task_list = store.get('task_list') || [];
@@ -126,9 +126,12 @@
 	    var $item = $this.parent().parent();
 	    var index = $item.data('index');
 	    var real_index = get(index);
-	    var tmp = confirm('确定删除?');
-	    // 點擊確定則刪除否則返回null
-	    return tmp ? delete_task(real_index) : null;
+
+	    pop('確定要刪除嗎？')
+		.then(function(r) {
+		    // 點擊確定則刪除否則返回null
+		    return r ? delete_task(real_index) : null;
+		});
 	});
     }
     
@@ -386,17 +389,58 @@
 	}
 
 	// conf作为函数的配置对象
-	var conf = {}, $box, $mask;
+	var conf = {},
+	    $box,
+	    $mask,
+	    $title,
+	    $content,
+	    $confirm,
+	    $cancel,
+	    dfd,
+	    confirmed,
+	    timer
+	;
 
-	$box = $('<div></div>')
+	dfd = $.Deferred();
+	if( typeof arg == 'string' ) {
+	    conf.title = arg;
+	}
+	else {
+	    conf = $.extend(conf, arg);
+	}
+
+	$box = $('<div>' +
+		 '<div class="pop-title">' + conf.title + '</div>' +
+		 '<div class="pop-content">' +
+		 '<div>' +
+		 '<button style="margin-right: 5px;" class="primary confirm">確定</button>' +
+		 '<button class="cancel">取消</button></div>' +
+		 '</div>' +
+		 '</div>')
 	    .css({
+		color: '#444',
 		width: 300,
-		height: 200,
+		height: 'auto',
+		padding: '15px 10px',
 		background: '#fff',
 		position: 'fixed',
 		'border-radius': 4,
 		'box-shadow': '0 1px 2px rgba(0,0,0,0.5)'
 	    });
+
+	// 文字樣式
+	$title = $box.find('.pop-title').css({
+	    padding: '5px 10px',
+	    'font-weight': 900,
+	    'font-size': 20,
+	    'text-align': 'center'
+	});
+	$content = $box.find('.pop-content').css({
+	    padding: '5px 10px',
+	    'text-align': 'center'
+	});
+	$confirm = $content.find('button.confirm');
+	$cancel = $content.find('button.cancel');
 
 	$mask = $('<div></div>')
 	    .css({
@@ -408,6 +452,7 @@
 		right: 0
 	    });
 
+	// 對話框居中
 	function adjust_box_position() {
 	    var window_width = $window.width(),
 		window_height = $window.height(),
@@ -424,26 +469,44 @@
 		left: move_x,
 		top: move_y
 	    });
-
 	}
 
+	timer = setInterval(function() {
+	    if( confirmed !== undefined ) {
+		dfd.resolve(confirmed);
+		clearInterval(timer);
+		dissmiss_pop();
+	    }
+	}, 50);
+	
+	// 標記點擊確定的狀態
+	$confirm.on('click', on_confirmed);
+	$cancel.on('click', on_cancelled);
+	$mask.on('click', on_cancelled);
+
+	function on_confirmed() {
+	    confirmed = true;
+	}
+	function on_cancelled() {
+	    confirmed = false;
+	}
+
+	// 隱藏pop
+	function dissmiss_pop() {
+	    $mask.remove();
+	    $box.remove();
+	}
+	
 	// 调整窗口大小時從新居中
 	$window.on('resize', function() {
 	    adjust_box_position();
 	});
 	
-	if( typeof arg == 'string' ) {
-	    conf.title = arg;
-	}
-	else {
-	    conf = $.extend(conf, arg);
-	}
-
 	$mask.appendTo($body);
 	$box.appendTo($body);
 	$window.resize();	// 初始狀體時居中
+	return dfd.promise();
     }
-
 })();//本地域
 
 

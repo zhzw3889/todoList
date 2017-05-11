@@ -78,6 +78,7 @@ button{
     width: 84%;
     margin-right: 1%;
 }
+button.primary,
 [type=submit] {
     background-color: #12989e;
 }
